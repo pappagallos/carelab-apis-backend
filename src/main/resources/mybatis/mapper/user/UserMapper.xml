@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="opensource.carelab.apis.user.mapper.IUserMapper">
+    <select id="isDuplicateEmail"
+            parameterType="opensource.carelab.apis.user.model.P_IsDuplicateEmail"
+            resultType="opensource.carelab.apis.user.model.R_IsDuplicateEmail">
+        SELECT COUNT(*) AS IS_DUPLICATE
+        FROM USER_GLOBAL
+        WHERE USER_EMAIL = #{email};
+    </select>
+
+    <select id="insertUser"
+            parameterType="opensource.carelab.apis.user.model.P_SignUpData"
+            resultType="opensource.carelab.apis.user.model.R_SignUpData">
+        BEGIN NOT ATOMIC
+
+        DECLARE V_EMAIL VARCHAR(200);
+        DECLARE V_PASSWORD VARCHAR(1024);
+        DECLARE V_NAME VARCHAR(50);
+        DECLARE V_PHONE VARCHAR(50);
+        DECLARE V_CREATE_DT VARCHAR(20);
+
+        SET V_EMAIL = #{email};
+        SET V_PASSWORD = #{password};
+        SET V_NAME = #{name};
+        SET V_PHONE = #{phone};
+
+        -- [1] 가입하고자 하는 사용자 정보 추가
+        INSERT INTO USER_GLOBAL(
+            USER_EMAIL
+            , USER_PASSWORD
+            , USER_NM
+            , PHONE
+            , CREATE_DT
+        )
+        VALUES(
+            V_EMAIL
+            , V_PASSWORD
+            , V_NAME
+            , V_PHONE
+            , NOW()
+        );
+
+        -- [2] 사용자가 입력했던 이메일, 이름, 핸드폰 번호를 콜백하여 정상적으로 가입이 되었다고 안내
+        SELECT V_EMAIL AS EMAIL, V_NAME AS NAME, V_PHONE AS PHONE;
+
+        END;
+    </select>
+</mapper>
