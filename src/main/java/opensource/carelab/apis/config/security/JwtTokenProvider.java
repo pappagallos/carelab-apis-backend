@@ -36,7 +36,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public UserContext fetchUserContextFromToken(String strJws) {
+    public UserContext fetchUserContextFromJws(String strJws) {
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()

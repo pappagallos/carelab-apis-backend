@@ -1,18 +1,18 @@
-package opensource.carelab.common.context.userContext;
+package opensource.carelab.apis.user.model;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
 @Setter
+@Getter
 @ToString
-public class UserContext {
+public class R_SelectUser {
     private String userEmail;
+    private String userPassword;
     private String userName;
     private String userPhone;
     private String userGroupCd;
     private int userStatus;
     private int userLevel;
-    private String token;
 }

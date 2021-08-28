@@ -17,7 +17,7 @@ public class ServiceProxyAspect {
             return proceedingJoinPoint.proceed();
         } catch (RuntimeException e) {
             log.error("[ERROR ServiceProxyAspect] Exception Error.");
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }

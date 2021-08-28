@@ -25,12 +25,11 @@
         SET V_NAME = #{name};
         SET V_PHONE = #{phone};
 
-        -- [1] 가입하고자 하는 사용자 정보 추가
         INSERT INTO USER_GLOBAL(
             USER_EMAIL
             , USER_PASSWORD
-            , USER_NM
-            , PHONE
+            , USER_NAME
+            , USER_PHONE
             , CREATE_DT
         )
         VALUES(
@@ -41,9 +40,17 @@
             , NOW()
         );
 
-        -- [2] 사용자가 입력했던 이메일, 이름, 핸드폰 번호를 콜백하여 정상적으로 가입이 되었다고 안내
         SELECT V_EMAIL AS EMAIL, V_NAME AS NAME, V_PHONE AS PHONE;
 
         END;
+    </select>
+
+    <select id="selectUser"
+            parameterType="opensource.carelab.apis.user.model.P_SelectUser"
+            resultType="opensource.carelab.apis.user.model.R_SelectUser">
+        SELECT USER_EMAIL, USER_PASSWORD, USER_NAME, USER_LEVEL, USER_PHONE, USER_GROUP_CD, USER_STATUS
+        FROM USER_GLOBAL
+        WHERE USER_STATUS != 9
+        AND USER_EMAIL = #{email};
     </select>
 </mapper>

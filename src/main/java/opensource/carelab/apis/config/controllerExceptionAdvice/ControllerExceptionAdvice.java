@@ -14,6 +14,7 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException e) {
         log.error("[handleRuntimeException ERROR] " + e.getMessage());
+        e.printStackTrace();
         return new ResponseEntity("INTERNAL_SERVER_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
