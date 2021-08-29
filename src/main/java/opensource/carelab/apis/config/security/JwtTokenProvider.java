@@ -1,9 +1,11 @@
 package opensource.carelab.apis.config.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import opensource.carelab.common.context.userContext.UserContext;
+import org.apache.catalina.User;
 import org.json.JSONObject;
 
 import javax.crypto.SecretKey;
@@ -14,11 +16,20 @@ public class JwtTokenProvider {
 
     public String createToken(UserContext userContext) {
         Date currentTime = new Date();
-        long tokenValidTime = 3600 * 60 * 1000L;
+        long tokenValidTime = (24 * 60 * 60 * 1000);
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
 
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userEmail", userContext.getUserEmail() == null ? JSONObject.NULL : userContext.getUserEmail())
+                .put("userName", userContext.getUserName() == null ? JSONObject.NULL : userContext.getUserName())
+                .put("userLevel", userContext.getUserLevel())
+                .put("userPhone", userContext.getUserPhone() == null ? JSONObject.NULL : userContext.getUserPhone())
+                .put("userGroupCd", userContext.getUserGroupCd() == null ? JSONObject.NULL : userContext.getUserGroupCd())
+                .put("userStatus", userContext.getUserStatus())
+                .put("token", userContext.getToken() == null ? JSONObject.NULL : userContext.getToken());
+
         String jws = Jwts.builder()
-                .setSubject(userContext.toString())
+                .setSubject(jsonObject.toString())
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setIssuedAt(currentTime)
                 .setExpiration(new Date(currentTime.getTime() + tokenValidTime))
@@ -27,26 +38,41 @@ public class JwtTokenProvider {
         return jws;
     }
 
-    public boolean isValidToken(String strJws) {
+    public boolean isValidToken(String strJws) throws Exception {
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(strJws);
             return true;
-        } catch (JwtException error) {
-            return false;
+        } catch (ExpiredJwtException e) {
+            throw new Exception(e);
+        } catch (Exception e) {
+            throw new Exception(e);
         }
     }
 
-    public UserContext fetchUserContextFromJws(String strJws) {
-        Jws<Claims> claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(strJws);
+    public UserContext fetchUserContextFromJws(String strJws) throws Exception {
+        try {
+            Jws<Claims> claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(strJws);
 
-        UserContext userContext = new UserContext();
-        JSONObject jsonObject = new JSONObject(claims.getBody().getSubject());
+            String claimsSubject = claims.getBody().getSubject();
+            JSONObject jsonClaims = new JSONObject(claimsSubject);
 
-        userContext = userContext.getClass().cast(jsonObject);
+            UserContext userContext = new UserContext();
+            userContext.setUserEmail(jsonClaims.has("userEmail") && jsonClaims.isNull("userEmail") ? "" : jsonClaims.getString("userEmail"));
+            userContext.setUserName(jsonClaims.has("userName") && jsonClaims.isNull("userName") ? "" : jsonClaims.getString("userName"));
+            userContext.setUserPhone(jsonClaims.has("userPhone") && jsonClaims.isNull("userPhone") ? "" : jsonClaims.getString("userPhone"));
+            userContext.setUserGroupCd(jsonClaims.has("userGroupCd") && jsonClaims.isNull("userGroupCd") ? "" : jsonClaims.getString("userGroupCd"));
+            userContext.setUserStatus(jsonClaims.has("userStatus") && jsonClaims.isNull("userStatus") ? 0 : jsonClaims.getInt("userStatus"));
+            userContext.setUserLevel(jsonClaims.has("userLevel") && jsonClaims.isNull("userLevel") ? 0 : jsonClaims.getInt("userLevel"));
+            userContext.setToken(jsonClaims.has("token") && jsonClaims.isNull("token") ? "" : jsonClaims.getString("token"));
 
-        return userContext;
+            return userContext;
+        } catch (ExpiredJwtException e) {
+            throw new Exception(e);
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 }

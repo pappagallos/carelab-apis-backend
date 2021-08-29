@@ -7,8 +7,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class R_SignUpData {
+public class P_InsertUser {
     private String email;
+    private String password;
     private String name;
     private String phone;
 }

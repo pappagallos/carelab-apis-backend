@@ -35,7 +35,7 @@ class ApisApplicationTests {
 		HashMap<String, String> userContext = new HashMap<String, String>();
 		userContext.put("email", "pappagallos@kakao.com");
 		userContext.put("name", "이우진");
-		userContext.put("phone", "010-2134-9876");
+		userContext.put("phone", "010-1234-9876");
 		userContext.put("groupCd", "1000");
 		userContext.put("status", "1");
 

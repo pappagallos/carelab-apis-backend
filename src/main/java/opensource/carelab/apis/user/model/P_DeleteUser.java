@@ -7,9 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class P_SignUpData {
+public class P_DeleteUser {
     private String email;
-    private String password;
-    private String name;
-    private String phone;
+    private String token;
 }

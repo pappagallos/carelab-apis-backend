@@ -10,8 +10,8 @@
     </select>
 
     <select id="insertUser"
-            parameterType="opensource.carelab.apis.user.model.P_SignUpData"
-            resultType="opensource.carelab.apis.user.model.R_SignUpData">
+            parameterType="opensource.carelab.apis.user.model.P_InsertUser"
+            resultType="opensource.carelab.apis.user.model.R_InsertUser">
         BEGIN NOT ATOMIC
 
         DECLARE V_EMAIL VARCHAR(200);
@@ -53,4 +53,21 @@
         WHERE USER_STATUS != 9
         AND USER_EMAIL = #{email};
     </select>
+
+    <update id="updateUser"
+            parameterType="opensource.carelab.apis.user.model.P_UpdateUser">
+        UPDATE USER_GLOBAL
+        SET USER_NAME = #{name}
+            , USER_PHONE = #{phone}
+            , USER_PASSWORD = #{password}
+            , UPDATE_DT = NOW()
+        WHERE USER_EMAIL = #{email}
+        AND USER_STATUS != 9;
+    </update>
+
+    <delete id="deleteUser"
+            parameterType="opensource.carelab.apis.user.model.P_DeleteUser">
+        DELETE FROM USER_GLOBAL
+        WHERE USER_EMAIL = #{email};
+    </delete>
 </mapper>
