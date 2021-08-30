@@ -1,5 +1,6 @@
 package opensource.carelab.apis.user.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import opensource.carelab.apis.config.security.JwtTokenProvider;
 import opensource.carelab.apis.user.mapper.IUserMapper;
 import opensource.carelab.apis.user.model.*;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserService implements IUserService {
     @Autowired
@@ -55,6 +57,7 @@ public class UserService implements IUserService {
 
                 // [3-3] 생성한 JWT 토큰을 userContext에 세팅
                 userContext.setToken(provider.createToken(userContext));
+                log.info("[UserService.selectUser] userContext : " + userContext);
 
                 return userContext;
             } else {
@@ -70,55 +73,37 @@ public class UserService implements IUserService {
     public Object deleteUser(String token, String email) throws Exception {
         // [1] JwtTokenProvider 로부터 userContext를 전달받기 위해 객체 생성
         JwtTokenProvider provider = new JwtTokenProvider();
+        UserContext userContext = provider.fetchUserContextFromJws(token);
 
-        // [2] 먼저 header로 받아온 Jws 토큰이 유효한 토큰인지 검사
-        if (provider.isValidToken(token)) {
-            // [2-1] 유효한 토큰이라면 userContext를 가져오기
-            UserContext userContext = provider.fetchUserContextFromJws(token);
+        // [2] 가져온 userContext를 P_DeleteUser 객체에 담아 mapper로 전달하기 위해 객체 생성
+        P_DeleteUser userInfo = new P_DeleteUser();
+        userInfo.setEmail(userContext.getUserEmail());
 
-            // [2-2] 가져온 userContext를 P_DeleteUser 객체에 담아 mapper로 전달하기 위해 객체 생성
-            P_DeleteUser userInfo = new P_DeleteUser();
-            userInfo.setEmail(userContext.getUserEmail());
-
-            // [2-3] 만약 Jws 토큰의 subject의 userEmail 값과 파라미터로 받아온 email의 값이 동일하다면 올바른 사용자이므로 삭제 처리
-            if (userInfo.getEmail().equals(email)) {
-                return mapper.deleteUser(userInfo);
-            }
+        // [3] 만약 Jws 토큰의 subject의 userEmail 값과 파라미터로 받아온 email의 값이 동일하다면 올바른 사용자이므로 삭제 처리
+        if (userInfo.getEmail().equals(email)) {
+            return mapper.deleteUser(userInfo);
         }
 
-        // [3] 만약 유효한 토큰이 아닐 경우 비정상적인 접근이므로 탈출
+        // [4] 만약 토큰과 userContext에서 가져온 email이 다르다면
         return "failed delete user.";
     }
 
     @Override
     public Object updateUser(String token, String email, P_UpdateUser params) throws Exception {
-        System.out.println("token => " + token);
-        System.out.println("email => " + email);
-        System.out.println("params => " + params);
-
         // [1] JwtTokenProvider 로부터 userContext를 전달받기 위해 객체 생성
         JwtTokenProvider provider = new JwtTokenProvider();
+        UserContext userContext = provider.fetchUserContextFromJws(token);
 
-        // [2] 먼저 header로 받아온 Jws 토큰이 유효한 토큰인지 검사
-        if (provider.isValidToken(token)) {
-            // [2-1] 유효한 토큰이라면 userContext를 가져오기
-            UserContext userContext = provider.fetchUserContextFromJws(token);
+        // [2] 가져온 userContext를 P_UpdateUser 객체에 담아 mapper로 전달하기 위해 객체 생성
+        P_UpdateUser userInfo = new P_UpdateUser();
+        userInfo.setEmail(userContext.getUserEmail());
+        userInfo.setName(params.getName());
+        userInfo.setPassword(BCrypt.hashpw(params.getPassword(), BCrypt.gensalt()));
+        userInfo.setPhone(params.getPhone());
 
-            System.out.println("userContext => " + userContext);
-
-            // [2-2] 가져온 userContext를 P_UpdateUser 객체에 담아 mapper로 전달하기 위해 객체 생성
-            P_UpdateUser userInfo = new P_UpdateUser();
-            userInfo.setEmail(userContext.getUserEmail());
-            userInfo.setName(params.getName());
-            userInfo.setPassword(BCrypt.hashpw(params.getPassword(), BCrypt.gensalt()));
-            userInfo.setPhone(params.getPhone());
-
-            System.out.println("userInfo => " + userInfo);
-
-            // [2-3] 만약 Jws 토큰의 subject의 userEmail 값과 파라미터로 받아온 email의 값이 동일하다면 올바른 사용자이므로 삭제 처리
-            if (userContext.getUserEmail().equals(email)) {
-                return mapper.updateUser(userInfo);
-            }
+        // [2-3] 만약 Jws 토큰의 subject의 userEmail 값과 파라미터로 받아온 email의 값이 동일하다면 올바른 사용자이므로 삭제 처리
+        if (userContext.getUserEmail().equals(email)) {
+            return mapper.updateUser(userInfo);
         }
 
         // [3] 만약 유효한 토큰이 아닐 경우 비정상적인 접근이므로 탈출
