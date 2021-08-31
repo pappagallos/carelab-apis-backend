@@ -15,15 +15,13 @@ public class AB1010Controller {
     AB1010Service service;
 
     @ValidateToken
-    @GetMapping("/items")
-    public Object getItems(
+    @GetMapping("/reagent")
+    public Object selectReagentList(
             @RequestHeader(value = "Authorization") String token,
-            @RequestParam int page,
-            @RequestParam(value = "page_count") int pageCount,
-            @RequestParam String search
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(value = "page_count", defaultValue = "30") int pageCount,
+            @RequestParam(required = false) String search
     ) throws Exception {
-        UserContext userContext = new UserContext();
-
-        return userContext;
+        return service.getReagentList(token, page, pageCount, search);
     }
 }
