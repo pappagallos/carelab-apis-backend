@@ -8,8 +8,11 @@ import lombok.ToString;
 @Getter
 @ToString
 public class P_AB1010SelectReagentList {
-    private int page;
-    private int pageCount;
-    private String search;
+    private String userEmail;
     private int pageOffset;
+    private int pageLimit;
+    private String search;
+    private int searchFg;
+    private String fromDt;
+    private String toDt;
 }

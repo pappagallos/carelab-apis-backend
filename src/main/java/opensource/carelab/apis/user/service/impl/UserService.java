@@ -51,7 +51,6 @@ public class UserService implements IUserService {
                 userContext.setUserEmail(userInfo.get().getUserEmail());
                 userContext.setUserName(userInfo.get().getUserName());
                 userContext.setUserPhone(userInfo.get().getUserPhone());
-                userContext.setUserGroupCd(userInfo.get().getUserGroupCd());
                 userContext.setUserStatus(userInfo.get().getUserStatus());
                 userContext.setUserLevel(userInfo.get().getUserLevel());
 

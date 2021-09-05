@@ -48,7 +48,7 @@
     <select id="selectUser"
             parameterType="opensource.carelab.apis.user.model.P_SelectUser"
             resultType="opensource.carelab.apis.user.model.R_SelectUser">
-        SELECT USER_EMAIL, USER_PASSWORD, USER_NAME, USER_LEVEL, USER_PHONE, USER_GROUP_CD, USER_STATUS
+        SELECT USER_EMAIL, USER_PASSWORD, USER_NAME, USER_LEVEL, USER_PHONE, USER_STATUS
         FROM USER_GLOBAL
         WHERE USER_STATUS != 9
         AND USER_EMAIL = #{email};

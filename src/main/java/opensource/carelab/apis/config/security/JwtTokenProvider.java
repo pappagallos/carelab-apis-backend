@@ -1,11 +1,9 @@
 package opensource.carelab.apis.config.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import opensource.carelab.common.context.userContext.UserContext;
-import org.apache.catalina.User;
 import org.json.JSONObject;
 
 import javax.crypto.SecretKey;

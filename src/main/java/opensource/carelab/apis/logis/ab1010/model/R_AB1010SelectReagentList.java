@@ -23,13 +23,4 @@ public class R_AB1010SelectReagentList {
     private String useDt;
     private String expireDt;
     private int status;
-    private String insertIp;
-    private String insertDt;
-    private String insertEmail;
-    private String modifyIp;
-    private String modifyDt;
-    private String modifyEmail;
-    private String deleteIp;
-    private String deleteDt;
-    private String deleteEmail;
 }

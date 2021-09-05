@@ -13,10 +13,13 @@ public class ServiceProxyAspect {
     @Around("execution (* opensource.carelab.apis..*.service..*.*(..))")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         try {
-            log.info("[ServiceProxyAspect] Access.");
-            return proceedingJoinPoint.proceed();
+            log.info("[ServiceProxyAspect] Start.");
+            Object response = proceedingJoinPoint.proceed();
+            log.info("[ServiceProxyAspect] End.");
+
+            return response;
         } catch (RuntimeException e) {
-            log.error("[ERROR ServiceProxyAspect] Exception Error.");
+            log.error("[ERROR] ServiceProxyAspect Exception Error.");
             throw new RuntimeException(e);
         }
     }

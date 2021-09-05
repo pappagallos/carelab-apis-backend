@@ -12,7 +12,6 @@ public class R_SelectUser {
     private String userPassword;
     private String userName;
     private String userPhone;
-    private String userGroupCd;
     private int userStatus;
     private int userLevel;
 }

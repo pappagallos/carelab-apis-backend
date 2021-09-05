@@ -21,29 +21,29 @@
         WHERE USER_EMAIL = #{userEmail}
                 <choose>
                     <!-- searchFg = 1, 등록일자 기준 -->
-                    <when test="searchFg == '1'">
+                    <when test="searchFg == 1">
                         <![CDATA[
-                            AND LEFT(REPLACE(#{fromDt}, '-', ''), 8) >= LEFT(LEFT(REPLACE(REG_DT, '-', ''), 8))
-                            AND LEFT(REPLACE(#{toDt}, '-', ''), 8) <= LEFT(LEFT(REPLACE(REG_DT, '-', ''), 8))
+                            AND LEFT(REPLACE(REG_DT, '-', ''), 8) >= LEFT(REPLACE(#{fromDt}, '-', ''), 8)
+                            AND LEFT(REPLACE(REG_DT, '-', ''), 8) <= LEFT(REPLACE(#{toDt}, '-', ''), 8)
                         ]]>
                     </when>
                     <!-- searchFg = 2, 사용일자 기준 -->
-                    <when test="searchFg == '2'">
+                    <when test="searchFg == 2">
                         <![CDATA[
-                            AND LEFT(REPLACE(#{fromDt}, '-', ''), 8) >= LEFT(LEFT(REPLACE(USE_DT, '-', ''), 8))
-                            AND LEFT(REPLACE(#{toDt}, '-', ''), 8) <= LEFT(LEFT(REPLACE(USE_DT, '-', ''), 8))
+                            AND LEFT(REPLACE(USE_DT, '-', ''), 8) >= LEFT(REPLACE(#{fromDt}, '-', ''), 8)
+                            AND LEFT(REPLACE(USE_DT, '-', ''), 8) <= LEFT(REPLACE(#{toDt}, '-', ''), 8)
                         ]]>
                     </when>
                     <!-- searchFg = 3 만료일자 기준 -->
-                    <when test="searchFg == '3'">
+                    <when test="searchFg == 3">
                         <![CDATA[
-                            AND LEFT(REPLACE(#{fromDt}, '-', ''), 8) >= LEFT(LEFT(REPLACE(EXPIRE_DT, '-', ''), 8))
-                            AND LEFT(REPLACE(#{toDt}, '-', ''), 8) <= LEFT(LEFT(REPLACE(EXPIRE_DT, '-', ''), 8))
+                            AND LEFT(REPLACE(EXPIRE_DT, '-', ''), 8) >= LEFT(REPLACE(#{fromDt}, '-', ''), 8)
+                            AND LEFT(REPLACE(EXPIRE_DT, '-', ''), 8) <= LEFT(REPLACE(#{toDt}, '-', ''), 8)
                         ]]>
                     </when>
                 </choose>
                 <!-- 검색할 키워드가 존재할 경우 조건문 -->
-                <if test="search != null or search != ''">
+                <if test="search != null and !''.equals(search)">
                     AND PRODUCT_NAME LIKE CONCAT('%', #{search}, '%')
                     OR CAT_NO LIKE CONCAT('%', #{search}, '%')
                     OR CAS_NO LIKE CONCAT('%', #{search}, '%')
@@ -54,6 +54,6 @@
                     OR USE_DT LIKE CONCAT('%', #{search}, '%')
                     OR EXPIRE_DT LIKE CONCAT('%', #{search}, '%')
                 </if>
-        LIMIT #{pageOffset}, #{pageCount};
+        LIMIT #{pageOffset}, #{pageLimit};
     </select>
 </mapper>

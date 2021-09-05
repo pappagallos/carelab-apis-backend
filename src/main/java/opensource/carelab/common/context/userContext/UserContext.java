@@ -1,6 +1,7 @@
 package opensource.carelab.common.context.userContext;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 

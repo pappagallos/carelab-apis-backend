@@ -13,7 +13,13 @@ import org.springframework.stereotype.Component;
 public class ControllerProxyAspect {
     @Around("execution(* opensource.carelab.apis..*.controller..*.*(..))")
     public ResponseEntity<Object> around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        log.info("[ControllerProxyAspect] Access.");
-        return new ResponseEntity(proceedingJoinPoint.proceed(), HttpStatus.OK);
+        log.info("[ControllerProxyAspect] Start.");
+
+        Object response = proceedingJoinPoint.proceed();
+        log.info("[ControllerProxyAspect] Response : " + response.toString());
+
+        log.info("[ControllerProxyAspect] End.");
+
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }

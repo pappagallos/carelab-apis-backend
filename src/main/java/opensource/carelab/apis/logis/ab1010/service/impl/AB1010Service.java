@@ -12,14 +12,9 @@ import org.springframework.stereotype.Service;
 public class AB1010Service implements IAB1010Service {
     @Autowired
     IAB1010Mapper mapper;
-    @Override
-    public Object getReagentList(String token, int page, int pageCount, String search) throws Exception {
-        P_AB1010SelectReagentList params = new P_AB1010SelectReagentList();
 
-        params.setPage(page);
-        params.setPageCount(pageCount);
-        params.setPageOffset(page * pageCount);
-        params.setSearch(search);
+    @Override
+    public Object getReagentList(P_AB1010SelectReagentList params) throws Exception {
 
         log.info("[getReagentList] parameters : " + params.toString());
 
