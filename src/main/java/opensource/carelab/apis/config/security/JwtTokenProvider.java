@@ -12,7 +12,7 @@ import java.util.Date;
 public class JwtTokenProvider {
     private String secretKey = "NWigbkwzUufyQzROxCnsjrMY2pdNrj8hTRSpen/n89pCo+gR5R2N/ww80a1XB/i9L0pdt386Y5oTzMgvAcLy7w==";
 
-    public String createToken(UserContext userContext) {
+    public String createToken(UserContext userContext) throws Exception {
         Date currentTime = new Date();
         long tokenValidTime = (24 * 60 * 60 * 1000);
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));

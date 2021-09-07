@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @Aspect
@@ -16,7 +17,7 @@ public class ControllerProxyAspect {
         log.info("[ControllerProxyAspect] Start.");
 
         Object response = proceedingJoinPoint.proceed();
-        log.info("[ControllerProxyAspect] Response : " + response.toString());
+        log.info("[ControllerProxyAspect] Response : {}", response);
 
         log.info("[ControllerProxyAspect] End.");
 

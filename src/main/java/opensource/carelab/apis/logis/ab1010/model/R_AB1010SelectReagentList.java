@@ -6,8 +6,8 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
-@Getter
 @Setter
+@Getter
 @ToString
 public class R_AB1010SelectReagentList {
     private int reagentSq;

@@ -1,5 +1,6 @@
 package opensource.carelab.apis.user.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import opensource.carelab.apis.annotation.ValidateToken;
 import opensource.carelab.apis.user.model.P_SelectUser;
 import opensource.carelab.apis.user.model.P_InsertUser;
@@ -8,6 +9,7 @@ import opensource.carelab.apis.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {

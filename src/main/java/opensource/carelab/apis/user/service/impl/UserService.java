@@ -2,6 +2,7 @@ package opensource.carelab.apis.user.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import opensource.carelab.apis.config.security.JwtTokenProvider;
+import opensource.carelab.apis.logis.ab1010.model.P_AB1010SelectReagentList;
 import opensource.carelab.apis.user.mapper.IUserMapper;
 import opensource.carelab.apis.user.model.*;
 import opensource.carelab.apis.user.service.IUserService;
@@ -56,7 +57,7 @@ public class UserService implements IUserService {
 
                 // [3-3] 생성한 JWT 토큰을 userContext에 세팅
                 userContext.setToken(provider.createToken(userContext));
-                log.info("[UserService.selectUser] userContext : " + userContext);
+                log.info("[UserService.selectUser] userContext : {}", userContext);
 
                 return userContext;
             } else {

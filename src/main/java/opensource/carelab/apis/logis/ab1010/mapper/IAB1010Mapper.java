@@ -8,5 +8,5 @@ import java.util.List;
 
 @Mapper
 public interface IAB1010Mapper {
-    List<R_AB1010SelectReagentList> getReagentList(P_AB1010SelectReagentList params) throws Exception;
+    List<R_AB1010SelectReagentList> selectReagentList(P_AB1010SelectReagentList params) throws Exception;
 }
